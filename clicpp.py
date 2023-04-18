@@ -1,6 +1,8 @@
 import json
 import os
 import tkinter as tk
+from tkinter import ttk
+import numpy as np
 from tkinter import messagebox, filedialog, simpledialog
 from tkinter import *
 
@@ -8,12 +10,17 @@ from tkinter import *
 global files
 files = {}
 
-def load_data_from_file():
-    if os.path.exists("user_files.json"):
-        with open("user_files.json", "r") as file:
-            return json.load(file)
+def load_data_from_file(file_path, skipcols=None, delimiter=','):
+    if skipcols:
+        with open(file_path) as f_input:
+            text = [l.replace("-", ",") for l in f_input]
+        data = np.loadtxt(text, delimiter=delimiter)
+        data = np.delete(data, skipcols, axis=1)
     else:
-        return {}
+        with open(file_path) as f_input:
+            text = [l.replace("-", ",") for l in f_input]
+        data = np.loadtxt(text, delimiter=delimiter)
+    return data
 
 def register_user():
     with open("users.json", "r+") as file:
@@ -100,7 +107,7 @@ def login_user():
 
 
 def main_notepad(username):
-    files = load_data_from_file()
+    files = load_data_from_file("data.txt", skipcols=[1, 2], delimiter=",")
     if username not in files:
         files[username] = {}
     notepad_window(username)
