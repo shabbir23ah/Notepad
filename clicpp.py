@@ -10,7 +10,7 @@ from tkinter import *
 global files
 files = {}
 
-def load_data_from_file(file_path, skipcols=None, delimiter=','):
+def load_data_from_files(file_path, skipcols=None, delimiter=','):
     if skipcols:
         with open(file_path) as f_input:
             text = [l.replace("-", ",") for l in f_input]
@@ -146,7 +146,7 @@ def main_notepad(username):
         with open("user_files.json", "w") as file:
             json.dump(files, file, indent=2)
 
-    def load_data_from_file():
+    def load_data_from_files():
         if os.path.exists("user_files.json"):
             with open("user_files.json", "r") as file:
                 return json.load(file)
